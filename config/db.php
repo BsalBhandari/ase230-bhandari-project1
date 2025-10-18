@@ -10,7 +10,7 @@
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'ase230_project1');
 define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_PASS', ''); // Empty password for local development
 define('DB_CHARSET', 'utf8mb4');
 
 /**
