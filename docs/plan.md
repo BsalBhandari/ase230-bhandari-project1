@@ -29,19 +29,60 @@ ase230-bhandari-project1/
 ## Features to Implement
 
 ### Core Features
-- [ ] User authentication system
-- [ ] Course management
-- [ ] Database integration
-- [ ] REST API endpoints
+- [x] User authentication system
+- [x] Course management
+- [x] Database integration
+- [x] REST API endpoints
 - [ ] Frontend interface
 
 ### Technical Requirements
-- [ ] PHP backend
-- [ ] MySQL database
-- [ ] RESTful API design
-- [ ] Error handling
-- [ ] Input validation
-- [ ] Security measures
+- [x] PHP backend
+- [x] MySQL database
+- [x] RESTful API design
+- [x] Error handling
+- [x] Input validation
+- [x] Security measures
+
+## Milestone 2 – Database + Authentication Phase
+**What:** Implemented login/register + DB integration  
+**When (Plan):** Week 7  
+**When (Actual):** October 15, 2025  
+**Comment:** Bearer token auth verified via cURL and HTML/JS tests; DB CRUD working with all 8 required APIs implemented and tested.
+
+### Completed Features:
+- ✅ **Database Setup**: MySQL database `ase230_project1` with 9 tables
+- ✅ **Authentication System**: JWT Bearer token authentication
+- ✅ **User Management**: Registration, login, profile retrieval
+- ✅ **Course Management**: Create, read, update courses
+- ✅ **Enrollment System**: Enroll users, list enrollments
+- ✅ **API Security**: Role-based permissions (student/instructor/admin)
+- ✅ **Comprehensive Testing**: cURL scripts + HTML/JS test suite
+
+### API Endpoints Implemented:
+1. **POST /api/users/register** - User registration
+2. **POST /api/users/login** 🔐 - User authentication (SECURE)
+3. **GET /api/users/profile** 🔐 - User profile retrieval (SECURE)
+4. **POST /api/courses** 🔐 - Course creation (SECURE)
+5. **GET /api/courses** - Course listing
+6. **PUT /api/courses/{id}** 🔐 - Course update (SECURE)
+7. **POST /api/enrollments** 🔐 - User enrollment (SECURE)
+8. **GET /api/enrollments** 🔐 - Enrollment listing (SECURE)
+
+### Technical Achievements:
+- **NGINX Configuration**: Proper URL routing for API endpoints
+- **PHP-FPM Integration**: Working PHP processing
+- **Database Schema**: Complete LMS-style database with relationships
+- **JWT Authentication**: Custom token generation and validation
+- **CORS Support**: Cross-origin requests enabled
+- **Error Handling**: Comprehensive error responses
+- **Input Validation**: Required field validation and sanitization
+
+## Additional Milestones
+- **GitHub repo + tools setup:** 10/18/2025 (Actual) - *Started working earlier, repo setup today*
+- **REST API list finalized:** 09/17/2025 (Plan)  
+- **Draft CRUD APIs:** 10/01/2025 (Plan)  
+- **API testing with curl/HTML:** 10/08/2025 (Plan)  
+- **Finalize slides for Project 1:** 10/18/2025 (not Plan)  
 
 ## Development Phases
 
@@ -49,13 +90,13 @@ ase230-bhandari-project1/
 - [x] Create GitHub repository
 - [x] Set up folder structure
 - [x] Configure database connection
-- [ ] Design database schema
+- [x] Design database schema
 
-### Phase 2: Backend Development
-- [ ] Create data models
-- [ ] Implement API endpoints
-- [ ] Add authentication
-- [ ] Test API functionality
+### Phase 2: Backend Development ✅ COMPLETED
+- [x] Create data models (database tables)
+- [x] Implement API endpoints (all 8 required)
+- [x] Add authentication (JWT Bearer tokens)
+- [x] Test API functionality (cURL + HTML/JS tests)
 
 ### Phase 3: Frontend Development
 - [ ] Create user interface

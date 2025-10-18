@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASE230 Project 1 - API Test Suite</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .test-section h3 {
+            color: #34495e;
+            margin-top: 0;
+        }
+        .test-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .test-button:hover {
+            background-color: #2980b9;
+        }
+        .test-button.secure {
+            background-color: #e74c3c;
+        }
+        .test-button.secure:hover {
+            background-color: #c0392b;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .result.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .result.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .result.info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .token-display {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            word-break: break-all;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status.pass {
+            background-color: #28a745;
+            color: white;
+        }
+        .status.fail {
+            background-color: #dc3545;
+            color: white;
+        }
+        .status.pending {
+            background-color: #ffc107;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 ASE230 Project 1 - API Test Suite</h1>
+        <p>This page tests all 8 required REST API endpoints using JavaScript fetch calls.</p>
+        
+        <div class="test-section">
+            <h3>1. User Registration (POST /users/register)</h3>
+            <button class="test-button" onclick="testRegister()">Test Registration</button>
+            <span id="register-status" class="status pending">PENDING</span>
+            <div id="register-result" class="result info" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>2. User Login (POST /users/login) 🔐 SECURE</h3>
+            <button class="test-button secure" onclick="testLogin()">Test Login</button>
+            <span id="login-status" class="status pending">PENDING</span>
+            <div id="login-result" class="result info" style="display: none;"></div>
+            <div id="token-display" class="token-display" style="display: none;">
+                <strong>Token:</strong> <span id="token-value"></span>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>3. User Profile (GET /users/profile) 🔐 SECURE</h3>
+            <button class="test-button secure" onclick="testProfile()">Test Profile</button>
+            <span id="profile-status" class="status pending">PENDING</span>
+            <div id="profile-result" class="result info" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>4. Course Creation (POST /courses) 🔐 SECURE</h3>
+            <button class="test-button secure" onclick="testCreateCourse()">Test Create Course</button>
+            <span id="create-course-status" class="status pending">PENDING</span>
+            <div id="create-course-result" class="result info" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>5. Course Listing (GET /courses)</h3>
+            <button class="test-button" onclick="testListCourses()">Test List Courses</button>
+            <span id="list-courses-status" class="status pending">PENDING</span>
+            <div id="list-courses-result" class="result info" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>6. Course Update (PUT /courses/{id}) 🔐 SECURE</h3>
+            <button class="test-button secure" onclick="testUpdateCourse()">Test Update Course</button>
+            <span id="update-course-status" class="status pending">PENDING</span>
+            <div id="update-course-result" class="result info" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>7. User Enrollment (POST /enrollments) 🔐 SECURE</h3>
+            <button class="test-button secure" onclick="testEnroll()">Test Enrollment</button>
+            <span id="enroll-status" class="status pending">PENDING</span>
+            <div id="enroll-result" class="result info" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>8. Enrollment Listing (GET /enrollments) 🔐 SECURE</h3>
+            <button class="test-button secure" onclick="testListEnrollments()">Test List Enrollments</button>
+            <span id="list-enrollments-status" class="status pending">PENDING</span>
+            <div id="list-enrollments-result" class="result info" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Run All Tests</h3>
+            <button class="test-button" onclick="runAllTests()" style="background-color: #27ae60;">Run All Tests</button>
+            <button class="test-button" onclick="clearAllResults()" style="background-color: #95a5a6;">Clear Results</button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        let authToken = null;
+        let instructorToken = null;
+        let createdCourseId = null;
+
+        // Utility functions
+        function updateStatus(testId, status, message = '') {
+            const statusElement = document.getElementById(testId + '-status');
+            statusElement.textContent = status;
+            statusElement.className = `status ${status.toLowerCase()}`;
+        }
+
+        function showResult(testId, data, isError = false) {
+            const resultElement = document.getElementById(testId + '-result');
+            resultElement.style.display = 'block';
+            resultElement.className = `result ${isError ? 'error' : 'success'}`;
+            resultElement.textContent = JSON.stringify(data, null, 2);
+        }
+
+        function makeRequest(url, options = {}) {
+            return fetch(url, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                },
+                ...options
+            })
+            .then(response => response.json())
+            .catch(error => {
+                console.error('Request failed:', error);
+                return { error: error.message };
+            });
+        }
+
+        // Test functions
+        async function testRegister() {
+            updateStatus('register', 'pending');
+            
+            const data = {
+                username: 'testuser_html_' + Date.now(),
+                email: 'testhtml' + Date.now() + '@example.com',
+                password: 'password123',
+                first_name: 'Test',
+                last_name: 'HTML'
+            };
+
+            try {
+                const result = await makeRequest(`${API_BASE}/users/register`, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+
+                if (result.success) {
+                    updateStatus('register', 'pass');
+                    showResult('register', result);
+                } else {
+                    updateStatus('register', 'fail');
+                    showResult('register', result, true);
+                }
+            } catch (error) {
+                updateStatus('register', 'fail');
+                showResult('register', { error: error.message }, true);
+            }
+        }
+
+        async function testLogin() {
+            updateStatus('login', 'pending');
+            
+            const data = {
+                username: 'student1',
+                password: 'password'
+            };
+
+            try {
+                const result = await makeRequest(`${API_BASE}/users/login`, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+
+                if (result.success) {
+                    authToken = result.token;
+                    document.getElementById('token-display').style.display = 'block';
+                    document.getElementById('token-value').textContent = authToken.substring(0, 50) + '...';
+                    
+                    updateStatus('login', 'pass');
+                    showResult('login', result);
+                } else {
+                    updateStatus('login', 'fail');
+                    showResult('login', result, true);
+                }
+            } catch (error) {
+                updateStatus('login', 'fail');
+                showResult('login', { error: error.message }, true);
+            }
+        }
+
+        async function testProfile() {
+            if (!authToken) {
+                alert('Please login first!');
+                return;
+            }
+
+            updateStatus('profile', 'pending');
+
+            try {
+                const result = await makeRequest(`${API_BASE}/users/profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (result.success) {
+                    updateStatus('profile', 'pass');
+                    showResult('profile', result);
+                } else {
+                    updateStatus('profile', 'fail');
+                    showResult('profile', result, true);
+                }
+            } catch (error) {
+                updateStatus('profile', 'fail');
+                showResult('profile', { error: error.message }, true);
+            }
+        }
+
+        async function testCreateCourse() {
+            // Get instructor token first
+            if (!instructorToken) {
+                const loginData = {
+                    username: 'instructor1',
+                    password: 'password'
+                };
+
+                try {
+                    const loginResult = await makeRequest(`${API_BASE}/users/login`, {
+                        method: 'POST',
+                        body: JSON.stringify(loginData)
+                    });
+
+                    if (loginResult.success) {
+                        instructorToken = loginResult.token;
+                    } else {
+                        updateStatus('create-course', 'fail');
+                        showResult('create-course', loginResult, true);
+                        return;
+                    }
+                } catch (error) {
+                    updateStatus('create-course', 'fail');
+                    showResult('create-course', { error: error.message }, true);
+                    return;
+                }
+            }
+
+            updateStatus('create-course', 'pending');
+
+            const data = {
+                title: 'HTML Test Course',
+                course_code: 'ASE' + Date.now(),
+                description: 'Course created via HTML test',
+                credits: 3,
+                semester: 'Spring',
+                year: 2026
+            };
+
+            try {
+                const result = await makeRequest(`${API_BASE}/courses`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${instructorToken}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (result.success) {
+                    createdCourseId = result.course.id;
+                    updateStatus('create-course', 'pass');
+                    showResult('create-course', result);
+                } else {
+                    updateStatus('create-course', 'fail');
+                    showResult('create-course', result, true);
+                }
+            } catch (error) {
+                updateStatus('create-course', 'fail');
+                showResult('create-course', { error: error.message }, true);
+            }
+        }
+
+        async function testListCourses() {
+            updateStatus('list-courses', 'pending');
+
+            try {
+                const result = await makeRequest(`${API_BASE}/courses`, {
+                    method: 'GET'
+                });
+
+                if (result.success) {
+                    updateStatus('list-courses', 'pass');
+                    showResult('list-courses', result);
+                } else {
+                    updateStatus('list-courses', 'fail');
+                    showResult('list-courses', result, true);
+                }
+            } catch (error) {
+                updateStatus('list-courses', 'fail');
+                showResult('list-courses', { error: error.message }, true);
+            }
+        }
+
+        async function testUpdateCourse() {
+            if (!instructorToken) {
+                alert('Please create a course first to get instructor token!');
+                return;
+            }
+
+            const courseId = createdCourseId || 1; // Use created course or fallback to course 1
+            updateStatus('update-course', 'pending');
+
+            const data = {
+                title: 'Updated HTML Test Course',
+                description: 'Updated description via HTML test',
+                credits: 4
+            };
+
+            try {
+                const result = await makeRequest(`${API_BASE}/courses/${courseId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${instructorToken}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (result.success) {
+                    updateStatus('update-course', 'pass');
+                    showResult('update-course', result);
+                } else {
+                    updateStatus('update-course', 'fail');
+                    showResult('update-course', result, true);
+                }
+            } catch (error) {
+                updateStatus('update-course', 'fail');
+                showResult('update-course', { error: error.message }, true);
+            }
+        }
+
+        async function testEnroll() {
+            if (!authToken) {
+                alert('Please login first!');
+                return;
+            }
+
+            updateStatus('enroll', 'pending');
+
+            const data = {
+                course_id: createdCourseId || 2 // Use created course or fallback to course 2
+            };
+
+            try {
+                const result = await makeRequest(`${API_BASE}/enrollments`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (result.success) {
+                    updateStatus('enroll', 'pass');
+                    showResult('enroll', result);
+                } else {
+                    updateStatus('enroll', 'fail');
+                    showResult('enroll', result, true);
+                }
+            } catch (error) {
+                updateStatus('enroll', 'fail');
+                showResult('enroll', { error: error.message }, true);
+            }
+        }
+
+        async function testListEnrollments() {
+            if (!authToken) {
+                alert('Please login first!');
+                return;
+            }
+
+            updateStatus('list-enrollments', 'pending');
+
+            try {
+                const result = await makeRequest(`${API_BASE}/enrollments`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (result.success) {
+                    updateStatus('list-enrollments', 'pass');
+                    showResult('list-enrollments', result);
+                } else {
+                    updateStatus('list-enrollments', 'fail');
+                    showResult('list-enrollments', result, true);
+                }
+            } catch (error) {
+                updateStatus('list-enrollments', 'fail');
+                showResult('list-enrollments', { error: error.message }, true);
+            }
+        }
+
+        // Run all tests in sequence
+        async function runAllTests() {
+            console.log('Starting all tests...');
+            
+            await testRegister();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testLogin();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testProfile();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testCreateCourse();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testListCourses();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testUpdateCourse();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testEnroll();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testListEnrollments();
+            
+            console.log('All tests completed!');
+        }
+
+        function clearAllResults() {
+            const testIds = ['register', 'login', 'profile', 'create-course', 'list-courses', 'update-course', 'enroll', 'list-enrollments'];
+            
+            testIds.forEach(testId => {
+                updateStatus(testId, 'pending');
+                const resultElement = document.getElementById(testId + '-result');
+                resultElement.style.display = 'none';
+            });
+            
+            document.getElementById('token-display').style.display = 'none';
+            authToken = null;
+            instructorToken = null;
+            createdCourseId = null;
+        }
+    </script>
+</body>
+</html>
